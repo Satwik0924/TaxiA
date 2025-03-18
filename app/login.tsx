@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useFonts } from 'expo-font'; // Expo font loading (if using Expo)
+ // Import Apple Authentication
 
 const LoginScreen = () => {
   const [fontsLoaded] = useFonts({
@@ -11,9 +12,10 @@ const LoginScreen = () => {
     return <Text>Loading fonts...</Text>; // Display loading text if fonts are not loaded
   }
 
+  // Function to handle Apple Sign-In
+
   return (
     <View style={styles.container}>
-   
       <Text style={styles.title}>Welcome Back!</Text>
 
       <View style={styles.formContainer}>
@@ -42,6 +44,9 @@ const LoginScreen = () => {
           Don't have an account?{' '}
           <Text style={styles.registerLink}>Register</Text>
         </Text>
+
+        {/* Sign in with Apple Button */}
+      
       </View>
     </View>
   );
@@ -58,7 +63,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   logo: {
-    width:'100%',
+    width: '100%',
     height: '30%',
     marginBottom: 20,
   },
@@ -121,5 +126,5 @@ const styles = StyleSheet.create({
   registerLink: {
     color: '#191970',
     fontWeight: 'bold',
-  },
+  }
 });
