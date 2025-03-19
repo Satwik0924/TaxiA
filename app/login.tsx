@@ -16,7 +16,7 @@ import * as AuthSession from 'expo-auth-session';
 import * as SecureStore from 'expo-secure-store';
 
 // Make sure the redirect is handled properly
-WebBrowser.maybeCompleteAuthSession();
+
 
 const LoginScreen = ({ navigation }) => {
   // State for email and password inputs
@@ -29,116 +29,9 @@ const LoginScreen = ({ navigation }) => {
   });
 
   // Google Authentication Hook
-  const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
-    webClientId: '113843530766-sccb96hqglk49vu7ul3kao5lg0bhq3o9.apps.googleusercontent.com',
-    iosClientId: '113843530766-0sl21d36boo89oa5utj8al5md6gopcl0.apps.googleusercontent.com',
-    scopes: ['profile', 'email'],
-    useProxy: true
-  });
 
-  // Logging redirect URIs
-  useEffect(() => {
-    const logRedirectDetails = () => {
-      const proxyRedirectUri = AuthSession.makeRedirectUri({ useProxy: true });
-      const directRedirectUri = AuthSession.makeRedirectUri({ useProxy: false });
-      
-      console.log('Redirect Configuration:', {
-        proxyRedirectUri,
-        directRedirectUri
-      });
-    };
 
-    logRedirectDetails();
-  }, []);
-
-  // Handle Google Authentication Response
-  useEffect(() => {
-    const handleAuthResponse = async () => {
-      if (response?.type === 'success') {
-        const { id_token } = response.params;
-        
-        try {
-          // Verify token with backend or Google
-          const userInfo = await fetchUserInfo(id_token);
-          
-          if (userInfo) {
-            // Store token securely
-            await SecureStore.setItemAsync('user_token', id_token);
-            
-            // Navigate or update app state
-            Alert.alert(
-              "Success", 
-              `Welcome, ${userInfo.name}!`,
-              [{ text: "OK", onPress: () => navigation.replace('Home') }]
-            );
-          }
-        } catch (error) {
-          console.error("Token verification error:", error);
-          Alert.alert("Error", "Failed to verify authentication");
-        }
-      } else if (response?.type === 'error') {
-        console.error("Authentication error:", response.error);
-        Alert.alert(
-          "Error", 
-          response.error?.description || 'Authentication failed'
-        );
-      }
-    };
-
-    handleAuthResponse();
-  }, [response, navigation]);
-
-  // Fetch user info from Google
-  const fetchUserInfo = async (idToken) => {
-    try {
-      const response = await fetch(
-        `https://www.googleapis.com/oauth2/v3/tokeninfo?id_token=${idToken}`
-      );
-      
-      if (!response.ok) {
-        throw new Error('Failed to fetch user info');
-      }
-
-      return await response.json();
-    } catch (error) {
-      console.error('Error fetching user info:', error);
-      return null;
-    }
-  };
-
-  // Handle standard email/password login
-  const handleStandardLogin = () => {
-    if (!email || !password) {
-      Alert.alert("Error", "Please enter both email and password");
-      return;
-    }
-
-    // TODO: Implement actual login logic
-    console.log("Attempting login with:", email);
-    Alert.alert("Login", "Standard login functionality to be implemented");
-  };
-
-  // Handle Google Sign-In
-  const handleGoogleSignIn = async () => {
-    console.log("Starting Google Sign-In...");
-    try {
-      await promptAsync();
-    } catch (error) {
-      console.error("Sign-in error:", error);
-      Alert.alert("Error", "Failed to start Google Sign-In: " + error.message);
-    }
-  };
-
-  // Navigate to registration
-  const navigateToRegister = () => {
-    navigation.navigate('Register');
-  };
-
-  // Prevent rendering until fonts are loaded
-  if (!fontsLoaded) {
-    return <Text>Loading fonts...</Text>;
-  }
-
+  // Logging redirect UR
   return (
     <KeyboardAvoidingView 
       style={styles.container}
@@ -167,7 +60,6 @@ const LoginScreen = ({ navigation }) => {
 
         <TouchableOpacity 
           style={styles.loginButton}
-          onPress={handleStandardLogin}
         >
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
@@ -182,8 +74,7 @@ const LoginScreen = ({ navigation }) => {
         {/* Google Sign-In Button */}
         <TouchableOpacity 
           style={styles.googleButton}
-          onPress={handleGoogleSignIn}
-          disabled={!request}
+         
         >
           <View style={styles.googleIcon}>
             <Text style={{ color: '#4285F4', fontWeight: 'bold' }}>G</Text>
@@ -195,7 +86,6 @@ const LoginScreen = ({ navigation }) => {
           Don't have an account?{' '}
           <Text 
             style={styles.registerLink}
-            onPress={navigateToRegister}
           >
             Register
           </Text>
