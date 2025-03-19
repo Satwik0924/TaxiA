@@ -23,11 +23,13 @@
     "@react-navigation/native": "^7.0.14",
     "autoprefixer": "^10.4.21",
     "expo": "~52.0.38",
+    "expo-auth-session": "~6.0.3",
     "expo-blur": "~14.0.3",
     "expo-constants": "~17.0.8",
     "expo-font": "~13.0.4",
     "expo-haptics": "~14.0.1",
     "expo-linking": "~7.0.5",
+    "expo-random": "^14.0.1",
     "expo-router": "~4.0.19",
     "expo-splash-screen": "~0.29.22",
     "expo-status-bar": "~2.0.1",
@@ -48,7 +50,9 @@
     "reified": "^0.2.4",
     "source-map-resolve": "^0.6.0",
     "tailwind-rn": "^4.2.0",
-    "tailwindcss": "^3.4.17"
+    "tailwindcss": "^3.4.17",
+    "expo-crypto": "~14.0.2",
+    "expo-secure-store": "~14.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
