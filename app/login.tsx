@@ -10,12 +10,6 @@ import {
   Platform 
 } from 'react-native';
 import { useFonts } from 'expo-font';
-import * as WebBrowser from 'expo-web-browser';
-import * as Google from 'expo-auth-session/providers/google';
-import * as AuthSession from 'expo-auth-session';
-import * as SecureStore from 'expo-secure-store';
-
-// Make sure the redirect is handled properly
 
 
 const LoginScreen = ({ navigation }) => {
@@ -85,8 +79,7 @@ const LoginScreen = ({ navigation }) => {
         <Text style={styles.registerText}>
           Don't have an account?{' '}
           <Text 
-            style={styles.registerLink}
-          >
+            style={styles.registerLink}>
             Register
           </Text>
         </Text>

@@ -8,6 +8,7 @@
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
+    "owner": "satwik1432",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.satwik1432.TaxiApp"
@@ -36,10 +37,24 @@
         }
       ],
       "expo-font",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.113843530766-537ammbtigca7pim3lbqt1mglnijcsjk"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "5e87f789-1974-4684-aa63-21ce8f646a45"
+      }
     }
   }
 }
