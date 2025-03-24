@@ -1,14 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { 
-  View, 
-  Text, 
-  TextInput, 
-  TouchableOpacity, 
-  StyleSheet, 
-  Alert, 
-  KeyboardAvoidingView, 
-  Platform 
-} from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, Platform, Image } from 'react-native';
+import * as Google from 'expo-auth-session';
 import { useFonts } from 'expo-font';
 
 
@@ -16,24 +8,23 @@ const LoginScreen = ({ navigation }) => {
   // State for email and password inputs
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [userDetails, setUserDetails] = useState(null); // To store authenticated user's info
+  const [loading, setLoading] = useState(false); // To handle loading state
 
   // Font loading
   const [fontsLoaded] = useFonts({
     'Raleway': require('../assets/fonts/Raleway.ttf'),
   });
 
-  // Google Authentication Hook
+  // Google OAuth Hook for Authentication
+  
 
-
-  // Logging redirect UR
   return (
-    <KeyboardAvoidingView 
-      style={styles.container}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    >
+    <View style={styles.container}>
       <Text style={styles.title}>Welcome Back!</Text>
 
       <View style={styles.formContainer}>
+        {/* Email and Password inputs */}
         <TextInput
           placeholder="Email"
           value={email}
@@ -54,27 +45,41 @@ const LoginScreen = ({ navigation }) => {
 
         <TouchableOpacity 
           style={styles.loginButton}
+          disabled={loading}
         >
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
-          style={styles.forgotPasswordButton}
-          onPress={() => navigation.navigate('ForgotPassword')}
-        >
-          <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-        </TouchableOpacity>
-
         {/* Google Sign-In Button */}
         <TouchableOpacity 
-          style={styles.googleButton}
-         
+          style={styles.googleButton} 
+          onPress={() => promptAsync()} // This triggers the browser redirection for Google login
+          disabled={loading}
         >
           <View style={styles.googleIcon}>
             <Text style={{ color: '#4285F4', fontWeight: 'bold' }}>G</Text>
           </View>
           <Text style={styles.googleButtonText}>Sign in with Google</Text>
         </TouchableOpacity>
+
+        {/* Loading Indicator */}
+        {loading && (
+          <View style={styles.loadingContainer}>
+            <Text style={styles.loadingText}>Signing you in...</Text>
+          </View>
+        )}
+
+        {/* Display User Information */}
+        {userDetails && (
+          <View style={styles.userDetailsContainer}>
+            <Image 
+              source={{ uri: userDetails.picture }} 
+              style={styles.userProfileImage} 
+            />
+            <Text style={styles.userInfoText}>Name: {userDetails.name}</Text>
+            <Text style={styles.userInfoText}>Email: {userDetails.email}</Text>
+          </View>
+        )}
 
         <Text style={styles.registerText}>
           Don't have an account?{' '}
@@ -84,7 +89,7 @@ const LoginScreen = ({ navigation }) => {
           </Text>
         </Text>
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
@@ -101,7 +106,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: 'bold',
     fontFamily: 'Raleway',
-    color: 'white',
+    color: '#333',
     marginBottom: 20,
   },
   formContainer: {
@@ -123,7 +128,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 25,
     fontFamily: 'Raleway',
-    color: 'black',
+    color: '#333',
   },
   loginButton: {
     backgroundColor: '#191970',
@@ -163,14 +168,32 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Raleway',
   },
-  forgotPasswordButton: {
+  loadingContainer: {
+    marginTop: 20,
     alignItems: 'center',
-    marginBottom: 20,
   },
-  forgotPasswordText: {
-    color: '#191970',
-    fontSize: 14,
-    fontFamily: 'Raleway',
+  loadingText: {
+    fontSize: 16,
+    color: '#4285F4',
+  },
+  userDetailsContainer: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#f9f9f9',
+    borderRadius: 5,
+    width: '80%',
+    alignItems: 'center',
+  },
+  userProfileImage: {
+    marginTop: 10,
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+  },
+  userInfoText: {
+    fontSize: 16,
+    color: '#333',
+    marginBottom: 10,
   },
   registerText: {
     textAlign: 'center',
@@ -181,7 +204,7 @@ const styles = StyleSheet.create({
   registerLink: {
     color: '#191970',
     fontWeight: 'bold',
-  }
+  },
 });
 
 export default LoginScreen;
